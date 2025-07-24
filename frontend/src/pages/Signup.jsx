@@ -5,6 +5,7 @@ import axios from "axios";
 const Signup = () => {
   const [data, setData] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -14,6 +15,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const res = await axios.post(
@@ -21,15 +23,10 @@ const Signup = () => {
         data
       );
 
-      // ✅ Save token and user data
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-
-      // ✅ Delay to make sure localStorage is set before redirect
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 100);
+      setLoading(false);
+      navigate("/login");
     } catch (err) {
+      setLoading(false);
       setError(err.response?.data?.message || "Something went wrong");
     }
   };
@@ -76,9 +73,15 @@ const Signup = () => {
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700"
+            disabled={loading}
+            className={`w-full flex items-center justify-center bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 ${
+              loading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
           >
-            Sign Up
+            {loading ? (
+              <span className="animate-spin h-5 w-5 border-t-2 border-white rounded-full mr-2"></span>
+            ) : null}
+            {loading ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
 

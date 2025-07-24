@@ -7,16 +7,16 @@ dotenv.config();
 
 const authRoutes = require("./routes/auth");
 const transactionRoutes = require("./routes/transaction");
+const goalRoutes = require("./routes/goal.js");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use("/api/goals", goalRoutes);
 
-// MongoDB connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {

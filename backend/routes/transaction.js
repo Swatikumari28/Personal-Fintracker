@@ -36,7 +36,7 @@ router.get("/", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ GET summary: total income, expense, and balance
+//  GET summary: total income, expense, and balance
 router.get("/summary", authMiddleware, async (req, res) => {
   try {
     const transactions = await Transaction.find({ user: req.user.id });
